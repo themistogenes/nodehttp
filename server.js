@@ -1,8 +1,13 @@
+// http module included with node.  No need to install.
 const http = require('http');
 
 const server = http.createServer(
   (req, res) => {
-    console.log(req);
+    // Destructure from req
+    const { headers, url, method } = req;
+    console.log(headers, url, method);
+
+    res.end();
   }
 );
 
