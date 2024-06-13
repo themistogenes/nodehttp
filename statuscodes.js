@@ -8,10 +8,10 @@
 // 3.xx REDIRECTION
 // 304  Not Modified
 
-// 4.xx CLIENT ERRORS
+// 4.xx CLIENT ERROR
 // 400  Bad Request
 // 401  Unauthorized
 // 404  Not Found
 
-// 5.xx SERVER ERRORS
+// 5.xx SERVER ERROR
 // 500  Internal Server Error
