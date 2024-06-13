@@ -3,9 +3,10 @@
 // 2.xx SUCCESS
 // 200  Success
 // 201  Created
-// 204  No Content
+// 204  No Content (e.g. deleting something on the server)
 
 // 3.xx REDIRECTION
+// 304  Not Modified
 
 // 4.xx CLIENT ERRORS
 // 400  Bad Request
