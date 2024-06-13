@@ -25,19 +25,40 @@ const server = http.createServer(
     // res.write('<h1>Hello</h1>');
 
     // Set Content-Type in Header to application/json
-    res.setHeader('Content-Type', 'application/json');
+    // res.setHeader('Content-Type', 'application/json');
 
     // Specify the technology running on the server
-    res.setHeader('X-Powered-By', 'Node.js');
+    // res.setHeader('X-Powered-By', 'Node.js');
 
     // End the response
     // res.end();
 
     // End the response and include single json object
-    res.end(JSON.stringify({
-        success: true,
-        data: todos
-    }))
+    // res.end(
+    //   JSON.stringify({
+    //     success: true,
+    //     data: todos
+    // }))
+
+    // Send back a status code for Not Found
+    // res.statusCode = 404;
+
+    // Send back status code and Content-Type, etc at the same time
+    res.writeHead(
+      404,
+      {
+        'Content-Type': 'application/json',
+        'X-Powered-By': 'Node.js'
+      }
+    )
+
+    res.end(
+      JSON.stringify({
+        success: false,
+        error: 'Not Found',
+        data: null
+      })
+    )
   }
 );
 
