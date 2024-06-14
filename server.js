@@ -45,18 +45,34 @@ const server = http.createServer(
 
     // Send back status code and Content-Type, etc at the same time
     res.writeHead(
-      404,
+      200,
       {
         'Content-Type': 'application/json',
         'X-Powered-By': 'Node.js'
       }
     )
 
+    // Check the authorization value in the req header
+    // Authorization: oie23424qhf09908aefadhf
+    console.log(req.headers.authorization);
+
+    // Check the data sent in the req body
+    // data sent in the body:
+    // {
+    //   "text": "Todo Four"
+    // }
+    let body = [];
+    req
+      .on('data', chunk => {body.push(chunk);})
+      .on('end', () => {
+        body = Buffer.concat(body).toString();
+        console.log(body);
+      })
+
     res.end(
       JSON.stringify({
-        success: false,
-        error: 'Not Found',
-        data: null
+        success: true,
+        data: todos
       })
     )
   }
