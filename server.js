@@ -1,7 +1,5 @@
-// http module included with node.  No need to install.
 const http = require('http');
 
-// Mock Data
 const todos = [
   { id: 1, text: 'Todo One' },
   { id: 2, text: 'Todo Two' },
@@ -10,71 +8,59 @@ const todos = [
 
 const server = http.createServer(
   (req, res) => {
-    // Destructure from req
-    // const { headers, url, method } = req;
-    // console.log(headers, url, method);
 
-    // Set Content-Type in Header to text/plain
-    // res.setHeader('Content-Type', 'text/plain');
-    // Return text
-    // res.write('hello');
+    const { method, url } = req;
 
-    // Set Content-Type in Header to text/html
-    // res.setHeader('Content-Type', 'text/html');
-    // Return html
-    // res.write('<h1>Hello</h1>');
-
-    // Set Content-Type in Header to application/json
-    // res.setHeader('Content-Type', 'application/json');
-
-    // Specify the technology running on the server
-    // res.setHeader('X-Powered-By', 'Node.js');
-
-    // End the response
-    // res.end();
-
-    // End the response and include single json object
-    // res.end(
-    //   JSON.stringify({
-    //     success: true,
-    //     data: todos
-    // }))
-
-    // Send back a status code for Not Found
-    // res.statusCode = 404;
-
-    // Send back status code and Content-Type, etc at the same time
-    res.writeHead(
-      200,
-      {
-        'Content-Type': 'application/json',
-        'X-Powered-By': 'Node.js'
-      }
-    )
-
-    // Check the authorization value in the req header
-    // Authorization: oie23424qhf09908aefadhf
-    console.log(req.headers.authorization);
-
-    // Check the data sent in the req body
-    // data sent in the body:
-    // {
-    //   "text": "Todo Four"
-    // }
     let body = [];
+
     req
-      .on('data', chunk => {body.push(chunk);})
+      .on('data', chunk => {
+        body.push(chunk);
+      })
       .on('end', () => {
         body = Buffer.concat(body).toString();
-        console.log(body);
+
+        // set default status to Not Found
+        let status = 404;
+
+        // set default response
+        const response = {
+          success: false,
+          data: null,
+          error: null
+        }
+
+        if (method === 'GET' && url === '/todos') {
+          status = 200;
+          response.success = true;
+          response.data = todos;
+        } else if (method === 'POST' && url === '/todos') {
+          const { id, text } = JSON.parse(body);
+
+          if (!id || !text) {
+            status = 400;
+            response.error = 'ID and text are required';
+          } else {
+            todos.push({ id, text});
+            status = 201;
+            response.success = true;
+            response.data = todos;
+          }
+        }
+
+        res.writeHead(
+          status,
+          {
+            'Content-Type': 'application/json',
+            'X-Powered-By': 'Node.js'
+          }
+        )
+
+        res.end(
+          JSON.stringify(response)
+        )
       })
 
-    res.end(
-      JSON.stringify({
-        success: true,
-        data: todos
-      })
-    )
   }
 );
 
